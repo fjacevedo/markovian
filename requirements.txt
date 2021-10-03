@@ -1,0 +1,10 @@
+numpy
+scipy
+pandas
+scikit-learn
+matplotlib
+seaborn
+xarray 
+dask 
+netCDF4 
+bottleneck
