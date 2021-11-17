@@ -7,7 +7,6 @@ import scipy.sparse as sparse
 import itertools as itr
 
 from sklearn import linear_model
-from sklearn import neighbors
 from scipy.sparse import linalg as splinalg
 
 import warnings
@@ -15,36 +14,38 @@ warnings.simplefilter('ignore')
 
 
 class Markovian3DVAR():
-    def __init__(self, N_lat, N_lon) -> None:
-        self.N_lat = N_lat
-        self.N_lon = N_lon
-        self.N_points = N_lat*N_lon
-        self.L_grid = [
-            np.arange(self.N_points).reshape(self.N_lat, self.N_lon)]
+    def __init__(self, N_lat, N_lon, pres_lvls) -> None:
+        self.N_LAT = N_lat
+        self.N_LON = N_lon
+        self.PRES_LVLS = pres_lvls
+        self.N_POINTS = N_lat*N_lon
+        self.L_GRID = [
+            np.arange(self.N_POINTS).reshape(self.N_LAT, self.N_LON)]
 
-    def __get_data_structure(self, r, N_lat, N_lon, N_var, L_grid):
+    def __get_data_structure(self, r, N_var):
         P = []
-        for v, y, x in itr.product(range(N_var), range(N_lat), range(N_lon)):
-            ran_lat = np.arange(max(0, y-r), min(N_lat, y+r+1))
-            ran_lon = np.arange(x-r, x+r+1) % N_lon
+        for v, y, x in itr.product(range(N_var), range(self.N_LAT),
+                                   range(self.N_LON)):
+            ran_lat = np.arange(max(0, y-r), min(self.N_LAT, y+r+1))
+            ran_lon = np.arange(x-r, x+r+1) % self.N_LON
             ind_loc = np.array(
                 [[j, i] for j in ran_lat for i in ran_lon])
-            local_box = L_grid[v][ind_loc[:, 0], ind_loc[:, 1]]
+            local_box = self.L_GRID[v][ind_loc[:, 0], ind_loc[:, 1]]
             local_box_add = np.array([
-                L_grid[z][ind_loc[:, 0], ind_loc[:, 1]]
+                self.L_GRID[z][ind_loc[:, 0], ind_loc[:, 1]]
                 for z in range(0, v)])
             local_box_add = local_box_add.flatten()
             local_box = np.hstack(
                 (local_box, local_box_add)).astype('int32')
 
-            label_grid = L_grid[v][y, x]
+            label_grid = self.L_GRID[v][y, x]
             local_pred = local_box[local_box < label_grid].astype('int32')
 
             P.append(local_pred)
 
         return P
 
-    def __get_inv_ridge(self, P, X, alp):
+    def __get_inv_ridge(self, P, X, alp=0.1):
         n = len(P)
         _I = list(range(n))
         J = list(range(n))
@@ -82,33 +83,27 @@ class Markovian3DVAR():
         out = H.tocsc()
         return out
 
-    def get_assimilation_results(self, N_points, steps, std, size, atms_ens,
-                                 atms_obs, Pr, atmospherical_models,
-                                 nbrs=None):
+    def get_assimilation_results(self, steps, std, size, atms_ens,
+                                 atms_obs, Pr, atmospherical_models):
         results = dict()
         for var in atms_ens.keys():
-            R_ = sparse.diags(np.array(1/std[var]**2).repeat(N_points))
+            R_ = sparse.diags(np.array(1/std[var]**2).repeat(self.N_points))
             by_var = list()
-            for lvl, level in enumerate(PRESSURE_LEVELS_VALUES):
-                Ms = [atmospherical_models[var][lvl, i] for i in range(4)]
+            for lvl, level in enumerate(self.PRES_LVLS):
+                Ms = atmospherical_models[var][lvl]
+                _L = Ms.L
                 xb = atms_ens[var][lvl, 0].T.mean(1).reshape(-1, 1)
                 rnd.seed(10)
                 xs = list()
-                points = np.arange(N_points)
+                points = np.arange(self.N_points)
                 for k in range(steps):
-                    if nbrs:
-                        _nbrs = nbrs[var][lvl, k % 4]
-                        idx = _nbrs.kneighbors(
-                            X=xb.reshape(1, -1), return_distance=False)
-                        Xb = atms_ens[var][lvl, k % 4, idx[0]].T
-                    else:
-                        Xb = atms_ens[var][lvl, k % 4].T
+                    Xb = atms_ens[var][lvl, k % _L].T
                     Obs_choosed = rnd.choice(points, size=size, replace=False)
                     Obs_choosed.sort()
                     DX = Xb-np.outer(xb, np.ones(Xb.shape[1]))
-                    L, D_inv = self.__get_inv_ridge(Pr, DX, 0.1)
+                    L, D_inv = self.__get_inv_ridge(Pr, DX)
                     Bk_ = L.T.dot(D_inv.dot(L))
-                    H = self.__get_H(Obs_choosed, N_points)
+                    H = self.__get_H(Obs_choosed, self.N_POINTS)
                     y = atms_obs[var][k, lvl].reshape(-1, 1)
                     d = H.dot(y - xb)
                     Rk_ = H.dot(R_.dot(H.T))
@@ -117,7 +112,7 @@ class Markovian3DVAR():
                     Z = splinalg.spsolve(A, b)
                     xa = xb + Z.reshape(-1, 1)
                     xs.append(xa)
-                    xb = Ms[(k+1) % 4].predict(xa.reshape(1, -1))
+                    xb = Ms.predict(xa.reshape(1, -1), current=(k+1) % _L)
                     xb = xb.reshape(-1, 1)
                 print(f'Var: {var}. Lvl: {level}. Done!')
                 by_var.append(xs)

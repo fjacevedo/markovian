@@ -236,6 +236,3 @@ for wt, n, r, p in itr.product(Wts, Ns, rs, obs):
         Path.cwd().parent/f'results/results_analysis_{wt}_n{n}_r{r}_obs{p}',
         **results)
     print(f"Done for {wt} with n={n}, r={r} and {p}% obs")
-
-
-
