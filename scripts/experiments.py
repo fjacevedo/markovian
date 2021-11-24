@@ -34,15 +34,17 @@ VAR_STD = dict({
     'rhum': 0.0001,
 })
 
-VAR_DATA_TRAIN = np.load(PATH/'../data/atmos_cond_train.npz')
-VAR_DATA_TEST = np.load(PATH/'../data/atmos_cond_test.npz')
+VAR_DATA_TRAIN = np.load(PATH.parent/'data/atmos_cond_train.npz')
+VAR_DATA_TEST = np.load(PATH.parent/'data/atmos_cond_test.npz')
 STEPS, _ = VAR_DATA_TEST[list(VAR_DATA_TEST.keys())[0]].shape
 
+print('{} with r={} and p_obs={}: Training models'.format(rg, r, int(p_obs*100)))
 var_models = dict({
     var: Markovian(
         N_lat=N_LAT, N_lon=N_LON, regressor=REGRESSORS[rg]).fit(vals)
     for var, vals in VAR_DATA_TRAIN.items()})
 
+print('{} with r={} and p_obs={}: Starting DA process'.format(rg, r, int(p_obs*100)))
 da_results = dict({
     var: model.EnKFMC_results(
         steps=STEPS,
@@ -55,7 +57,8 @@ da_results = dict({
     for var, model in var_models.items()
 })
 
-np.savez(
-    PATH/f'../results/results_analysis_{rg}_r{r}_obs{p_obs}', **da_results)
+print(print('{} with r={} and p_obs={}: Saving results'.format(rg, r, int(p_obs*100))))
+np.savez(PATH.parent/'results/{}_{}_{}'.format(rg, r, int(p_obs*100)),
+         **da_results)
 
-print(f"Done for {rg} with r={r} and p_obs={p_obs}")
+print(print('{} with r={} and p_obs={}: Done!'.format(rg, r, int(p_obs*100))))

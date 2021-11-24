@@ -4,7 +4,13 @@
 #SBATCH -o ./slurm-output/slurm-%j.out # STDOUT
 #SBATCH --ntasks=1               # total number of tasks
 #SBATCH --cpus-per-task=70       # cpu-cores per task
+#SBATCH --time=72:00:00          # total run time limit (HH:MM:SS)
 #SBATCH --account=syseng
 #SBATCH --partition=syseng
 
-/work/syseng/users/fjacevedo/Markovian/env/bin/python /work/syseng/users/fjacevedo/Markovian/scripts/experiments.py GaussianProcessRegressor 7 0.15
+module purge
+module load miniconda gnu8/8.3.0
+
+eval "$(conda shell.bash hook)"
+conda activate markovian
+python ./scripts/experiments.py GaussianProcessRegressor 7 0.15
