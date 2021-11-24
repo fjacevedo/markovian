@@ -5,7 +5,7 @@ PATH = Path(__file__).parent.resolve()
 with open(PATH.parent/'master_run.sh', 'w', newline='\n') as bash:
     bash.write('#!/bin/bash\n')
     for file in os.listdir(PATH.parent/'exps'):
-        if file.split('.')[1] == 'txt':
+        if file.split('.')[-1] == 'txt':
             continue
         bash.writelines(f'sbatch ./exps/{file}\n')
 
