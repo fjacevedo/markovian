@@ -1,0 +1,1 @@
+/var/spool/slurm/d/job455898/slurm_script: line 16: 19723 Killed                  python ./scripts/experiments.py Lars 5 0.05

@@ -7,7 +7,10 @@ with open(PATH.parent/'master_run.sh', 'w', newline='\n') as bash:
     for file in os.listdir(PATH.parent/'exps'):
         if file.split('.')[-1] == 'txt':
             continue
-        bash.writelines(f'sbatch ./exps/{file}\n')
+        if file.split('_')[0] in ['LinearRegression', 'Ridge', 'RidgeCV',
+                                  'ElasticNetCV', 'LarsCV',
+                                  'MultiTaskElasticNet', 'MultiTaskLasso']:
+            bash.writelines(f'sbatch ./exps/{file}\n')
 
 file_path = PATH.parent/'master_run.sh'
 os.system(f'chmod u+x {file_path}')

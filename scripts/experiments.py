@@ -18,7 +18,7 @@ r, p_obs = int(r), float(p_obs)
 # with open(PATH/'../regressors.pkl', 'wb') as handle:
 #     pickle.dump(regressors, handle)
 
-with open(PATH/'../regressors.pkl', 'rb') as handle:
+with open(PATH.parent/'regressors.pkl', 'rb') as handle:
     REGRESSORS = pickle.load(handle)
 
 # PRESSURE_LEVELS_VALUES = [925, 850, 700, 500, 300, 200, 100]

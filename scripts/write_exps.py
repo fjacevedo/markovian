@@ -5,7 +5,10 @@ PATH = Path(__file__).parent.resolve()
 
 regressors = ['ElasticNet', 'Lars', 'Lasso', 'LassoLars',
               'GaussianProcessRegressor', 'KNeighborsRegressor',
-              'RandomForestRegressor']
+              'RandomForestRegressor', 'LinearRegression', 'Ridge', 'RidgeCV',
+              'ElasticNetCV', 'LarsCV', 'MultiTaskElasticNet',
+              'MultiTaskLasso']
+
 obs = [0.05, 0.10, 0.15]
 rs = [3, 5, 7]
 for rg, r, p in itr.product(regressors, rs, obs):

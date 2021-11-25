@@ -1,10 +1,12 @@
 import os
+import pickle
 import itertools as itr
 from pathlib import Path
 PATH = Path(__file__).parent.resolve()
 
 regressors = ['ARDRegression', 'BayesianRidge', 'AdaBoostRegressor',
               'HistGradientBoostingRegressor', 'GradientBoostingRegressor']
+
 obs = [0.05, 0.10, 0.15]
 rs = [3, 5, 7]
 for rg, r, p in itr.product(regressors, rs, obs):
