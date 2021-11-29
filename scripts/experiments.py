@@ -4,12 +4,16 @@ import numpy as np
 from numpy.core.fromnumeric import var
 from Markovian import Markovian
 from pathlib import Path
-import sklearn.utils as skutils
+from datetime import datetime as dt
+# import sklearn.utils as skutils
 
 PATH = Path(__file__).parent.resolve()
 
 rg, r, p_obs = sys.argv[1:]
 r, p_obs = int(r), float(p_obs)
+
+prints = open(PATH.parent/'prints/{}_{}_{}.txt'.format(rg, r, int(p_obs*100)), 'w')
+prints.write('{}: Started Running\n'.format(dt.now().strftime("%d/%m/%Y %H:%M:%S")))
 
 # regressors = dict({
 #     name: _class for name, _class in
@@ -39,26 +43,27 @@ VAR_DATA_TRAIN = np.load(PATH.parent/'data/atmos_cond_train.npz')
 VAR_DATA_TEST = np.load(PATH.parent/'data/atmos_cond_test.npz')
 STEPS, _ = VAR_DATA_TEST[list(VAR_DATA_TEST.keys())[0]].shape
 
-print('{} with r={} and p_obs={}: Training models'.format(rg, r, int(p_obs*100)))
+prints.write('{}: Training models\n'.format(dt.now().strftime("%d/%m/%Y %H:%M:%S")))
 var_models = dict({
-    var: Markovian(
-        N_lat=N_LAT, N_lon=N_LON, regressor=REGRESSORS[rg]).fit(vals)
+    var: (Markovian(
+        N_lat=N_LAT, N_lon=N_LON, regressor=REGRESSORS[rg], n_jobs=-1).fit(vals)
+        if'n_jobs' in REGRESSORS[rg]().get_params() else Markovian(
+        N_lat=N_LAT, N_lon=N_LON, regressor=REGRESSORS[rg]).fit(vals))
     for var, vals in VAR_DATA_TRAIN.items()})
 
-print('{} with r={} and p_obs={}: Initiates models'.format(rg, r, int(p_obs*100)))
+prints.write('{}: Initiates models\n'.format(dt.now().strftime("%d/%m/%Y %H:%M:%S")))
 for var, model in var_models.items():
     model.init_EnKFMC(
         std=VAR_STD[var],
         atms_ens=VAR_DATA_TRAIN[var],
         p_obs=p_obs,
-        r=r,
-        seed=10
+        r=r
     )
 
-print('{} with r={} and p_obs={}: Starting DA process'.format(rg, r, int(p_obs*100)))
+prints.write('{}: Starting DA process\n'.format(dt.now().strftime("%d/%m/%Y %H:%M:%S")))
 da_results = dict({var: np.zeros((STEPS, N_LAT*N_LON))
                    for var in VAR})
-da_steps = dict({var: model.step_EnKFMC(atms_obs=VAR_DATA_TEST[var])
+da_steps = dict({var: model.step_EnKFMC(atms_obs=VAR_DATA_TEST[var], seed=10)
                  for var, model in var_models.items()})
 
 for step in range(STEPS):
@@ -66,8 +71,9 @@ for step in range(STEPS):
         da_results[var][step] = next(da_steps[var])
 
     if step % 10 == 0:
-        print(print('{} with r={} and p_obs={}: Saving results at step={}'.format(rg, r, int(p_obs*100), step)))
+        prints.write('{}: Saving results at step={}'.format(dt.now().strftime("%d/%m/%Y %H:%M:%S"), step))
         np.savez(PATH.parent/'results/{}_{}_{}'.format(rg, r, int(p_obs*100)),
                  **da_results)
 
-print(print('{} with r={} and p_obs={}: Done!'.format(rg, r, int(p_obs*100))))
+prints.write('{}: Done!'.format(dt.now().strftime("%d/%m/%Y %H:%M:%S")))
+prints.close()

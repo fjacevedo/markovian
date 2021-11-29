@@ -146,17 +146,16 @@ class Markovian(base.BaseEstimator):
         out = H.tocsc()
         return out
 
-    def init_EnKFMC(self, std, atms_ens, r, p_obs, seed=None):
-        rnd.seed(seed=seed)
+    def init_EnKFMC(self, std, atms_ens, r, p_obs):
         self._size = int(self.N_POINTS*p_obs)
         self._atms_ens = self.__group_by_steps(atms_ens)
         self._Pr = self.__get_data_structure(r)
         self._R = sparse.diags(np.array(1/std**2).repeat(self.N_POINTS))
         self._xb = self._atms_ens[0].T.mean(1).reshape(-1, 1)
 
-    def step_EnKFMC(self, atms_obs):
+    def step_EnKFMC(self, atms_obs, seed=None):
+        rnd.seed(seed=seed)
         points = np.arange(self.N_POINTS)
-
         step = 0
         while True:
             Xb = self._atms_ens[step % self.L].T
