@@ -4,7 +4,7 @@
 #SBATCH -o ./slurm-output/slurm-%j.out # STDOUT
 #SBATCH --ntasks=1               # total number of tasks
 #SBATCH --cpus-per-task=70       # cpu-cores per task
-#SBATCH --time=72:00:00          # total run time limit (HH:MM:SS)
+#SBATCH --time=120:00:00          # total run time limit (HH:MM:SS)
 #SBATCH --account=syseng
 #SBATCH --partition=syseng
 

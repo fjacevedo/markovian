@@ -1,6 +1,7 @@
 import sys
 import pickle
 import numpy as np
+from numpy.core.fromnumeric import var
 from Markovian import Markovian
 from pathlib import Path
 import sklearn.utils as skutils
@@ -44,21 +45,29 @@ var_models = dict({
         N_lat=N_LAT, N_lon=N_LON, regressor=REGRESSORS[rg]).fit(vals)
     for var, vals in VAR_DATA_TRAIN.items()})
 
-print('{} with r={} and p_obs={}: Starting DA process'.format(rg, r, int(p_obs*100)))
-da_results = dict({
-    var: model.EnKFMC_results(
-        steps=STEPS,
+print('{} with r={} and p_obs={}: Initiates models'.format(rg, r, int(p_obs*100)))
+for var, model in var_models.items():
+    model.init_EnKFMC(
         std=VAR_STD[var],
+        atms_ens=VAR_DATA_TRAIN[var],
         p_obs=p_obs,
         r=r,
-        atms_ens=VAR_DATA_TRAIN[var],
-        atms_obs=VAR_DATA_TEST[var],
-        seed=10)
-    for var, model in var_models.items()
-})
+        seed=10
+    )
 
-print(print('{} with r={} and p_obs={}: Saving results'.format(rg, r, int(p_obs*100))))
-np.savez(PATH.parent/'results/{}_{}_{}'.format(rg, r, int(p_obs*100)),
-         **da_results)
+print('{} with r={} and p_obs={}: Starting DA process'.format(rg, r, int(p_obs*100)))
+da_results = dict({var: np.zeros((STEPS, N_LAT*N_LON))
+                   for var in VAR})
+da_steps = dict({var: model.step_EnKFMC(atms_obs=VAR_DATA_TEST[var])
+                 for var, model in var_models.items()})
+
+for step in range(STEPS):
+    for var in VAR:
+        da_results[var][step] = next(da_steps[var])
+
+    if step % 10 == 0:
+        print(print('{} with r={} and p_obs={}: Saving results at step={}'.format(rg, r, int(p_obs*100), step)))
+        np.savez(PATH.parent/'results/{}_{}_{}'.format(rg, r, int(p_obs*100)),
+                 **da_results)
 
 print(print('{} with r={} and p_obs={}: Done!'.format(rg, r, int(p_obs*100))))

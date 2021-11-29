@@ -146,32 +146,34 @@ class Markovian(base.BaseEstimator):
         out = H.tocsc()
         return out
 
-    def EnKFMC_results(self, steps, std, atms_ens, atms_obs, r, p_obs,
-                       seed=None):
-        size = int(self.N_POINTS*p_obs)
-        _atms_ens = self.__group_by_steps(atms_ens)
-        Pr = self.__get_data_structure(r)
-        R_ = sparse.diags(np.array(1/std**2).repeat(self.N_POINTS))
-        xb = _atms_ens[0].T.mean(1).reshape(-1, 1)
+    def init_EnKFMC(self, std, atms_ens, r, p_obs, seed=None):
         rnd.seed(seed=seed)
-        out = np.zeros((self.N_POINTS, steps))
+        self._size = int(self.N_POINTS*p_obs)
+        self._atms_ens = self.__group_by_steps(atms_ens)
+        self._Pr = self.__get_data_structure(r)
+        self._R = sparse.diags(np.array(1/std**2).repeat(self.N_POINTS))
+        self._xb = self._atms_ens[0].T.mean(1).reshape(-1, 1)
+
+    def step_EnKFMC(self, atms_obs):
         points = np.arange(self.N_POINTS)
-        for k in range(steps):
-            Xb = _atms_ens[k % self.L].T
-            Obs_choosed = rnd.choice(points, size=size, replace=False)
+
+        step = 0
+        while True:
+            Xb = self._atms_ens[step % self.L].T
+            Obs_choosed = rnd.choice(points, size=self._size, replace=False)
             Obs_choosed.sort()
-            DX = Xb-np.outer(xb, np.ones(Xb.shape[1]))
-            L, D_inv = self.__get_inv_ridge(Pr, DX)
+            DX = Xb-np.outer(self._xb, np.ones(Xb.shape[1]))
+            L, D_inv = self.__get_inv_ridge(self._Pr, DX)
             Bk_ = L.T.dot(D_inv.dot(L))
             H = self.__get_H(Obs_choosed, self.N_POINTS)
-            y = atms_obs[k].reshape(-1, 1)
-            d = H.dot(y - xb)
-            Rk_ = H.dot(R_.dot(H.T))
+            y = atms_obs[step].reshape(-1, 1)
+            d = H.dot(y - self._xb)
+            _Rk = H.dot(self._R.dot(H.T))
             Z = splinalg.spsolve(
-                Bk_ + H.T.dot(Rk_.dot(H)),
-                H.T.dot(Rk_.dot(d)))
-            xa = xb + Z.reshape(-1, 1)
-            out[:, k] = xa.ravel()
-            xb = self.predict(xa.reshape(1, -1), current=(k+1) % self.L)
-            xb = xb.reshape(-1, 1)
-        return out
+                Bk_ + H.T.dot(_Rk.dot(H)),
+                H.T.dot(_Rk.dot(d)))
+            xa = self._xb + Z.reshape(-1, 1)
+            yield xa.ravel()
+            self._xb = self.predict(xa.reshape(1, -1), current=(step+1) % self.L)
+            self._xb = self._xb.reshape(-1, 1)
+            step += 1
