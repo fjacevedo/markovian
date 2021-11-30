@@ -173,6 +173,7 @@ class Markovian(base.BaseEstimator):
                 H.T.dot(_Rk.dot(d)))
             xa = self._xb + Z.reshape(-1, 1)
             yield xa.ravel()
-            self._xb = self.predict(xa.reshape(1, -1), current=(step+1) % self.L)
+            self._xb = self.predict(
+                xa.reshape(1, -1), current=(step+1) % self.L)
             self._xb = self._xb.reshape(-1, 1)
             step += 1
