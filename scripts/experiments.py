@@ -1,7 +1,7 @@
 import sys
 import pickle
 import numpy as np
-from . Markovian import Markovian
+from Markovian import Markovian
 from pathlib import Path
 from datetime import datetime as dt
 # import sklearn.utils as skutils
@@ -63,12 +63,6 @@ else:
             N_lat=N_LAT, N_lon=N_LON, regressor=REGRESSORS[rg]).fit(vals)
         for var, vals in VAR_DATA_TRAIN.items()
     })
-var_models = dict({
-    var: (Markovian(
-        N_lat=N_LAT, N_lon=N_LON, regressor=REGRESSORS[rg], n_jobs=-1).fit(vals)
-        if'n_jobs' in REGRESSORS[rg]().get_params() else Markovian(
-        N_lat=N_LAT, N_lon=N_LON, regressor=REGRESSORS[rg]).fit(vals))
-    for var, vals in VAR_DATA_TRAIN.items()})
 
 prints.write(
     '{}: Initiates models\n'.format(dt.now().strftime("%d/%m/%Y %H:%M:%S")))
