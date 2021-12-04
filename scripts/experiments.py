@@ -87,7 +87,7 @@ for step in range(STEPS):
 
     if step % 10 == 0:
         prints.write(
-            '{}: Saving results at step={}'.format(dt.now().strftime(
+            '{}: Saving results at step={}\n'.format(dt.now().strftime(
                 "%d/%m/%Y %H:%M:%S"), step))
         np.savez(PATH.parent/'results/{}_{}_{}'.format(rg, r, int(p_obs*100)),
                  **da_results)
