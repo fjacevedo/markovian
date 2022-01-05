@@ -1,0 +1,1 @@
+/var/spool/slurm/d/job464757/slurm_script: line 16: 26494 Killed                  python ./scripts/experiments.py RandomForestRegressor 3 0.15

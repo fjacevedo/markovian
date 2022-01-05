@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "./scripts/experiments.py", line 52, in <module>
+    var_models = dict({
+  File "./scripts/experiments.py", line 53, in <dictcomp>
+    var: Markovian(
+  File "/work/syseng/users/fjacevedo/Markovian/scripts/Markovian.py", line 62, in fit
+    model.fit(X=_X[i], y=_X[i+1])
+  File "/home/syseng/fjacevedo/.conda/envs/markovian/lib/python3.8/site-packages/sklearn/linear_model/_coordinate_descent.py", line 1246, in fit
+    raise ValueError("For multi-task outputs, use "
+ValueError: For multi-task outputs, use MultiTaskElasticNetCV

@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "./scripts/experiments.py", line 86, in <module>
+    da_results[var][step] = next(da_steps[var])
+  File "/work/syseng/users/fjacevedo/Markovian/scripts/Markovian.py", line 176, in step_EnKFMC
+    self._xb = self.predict(
+  File "/work/syseng/users/fjacevedo/Markovian/scripts/Markovian.py", line 79, in predict
+    _X = check_array(X, accept_sparse=True)
+  File "/home/syseng/fjacevedo/.conda/envs/markovian/lib/python3.8/site-packages/sklearn/utils/validation.py", line 63, in inner_f
+    return f(*args, **kwargs)
+  File "/home/syseng/fjacevedo/.conda/envs/markovian/lib/python3.8/site-packages/sklearn/utils/validation.py", line 720, in check_array
+    _assert_all_finite(array,
+  File "/home/syseng/fjacevedo/.conda/envs/markovian/lib/python3.8/site-packages/sklearn/utils/validation.py", line 103, in _assert_all_finite
+    raise ValueError(
+ValueError: Input contains NaN, infinity or a value too large for dtype('float64').

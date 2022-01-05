@@ -1,0 +1,2 @@
+02/01/2022 22:48:46: Started Running
+02/01/2022 22:48:46: Training models
