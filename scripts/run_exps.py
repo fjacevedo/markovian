@@ -10,6 +10,8 @@ with open(PATH.parent/'master_run.sh', 'w', newline='\n') as bash:
     for file in files:
         if file.split('.')[-1] == 'txt':
             continue
+        if 'RandomForestRegressor' not in file.split('.')[0]:
+            continue
         bash.writelines(f'sbatch ./exps/{file}\n')
 
 file_path = PATH.parent/'master_run.sh'
