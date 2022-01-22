@@ -7,7 +7,7 @@ with open(PATH.parent/'status.csv', 'w') as f:
     for file in os.listdir(PATH.parent/'slurm-output'):
         out = subprocess.run([
             "sacct", f"--job={''.join(re.findall('[0-9]', file))}",
-            "--format=JobID, Jobname%50,state,time"],
+            "--format=JobID, Jobname%50,state"],
             stdout=subprocess.PIPE).stdout.decode('utf-8').split('\n')
         to_write = out[2].split()
         f.writelines(','.join(to_write)+'\n')

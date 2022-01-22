@@ -70,7 +70,7 @@ for var, values in atmospherical_variables_test.items():
                 CWD.parent/f"results/exp_Markovian_zeta/results_L{L}_K{K}_r{r}.npz")
             y_true = values[:, 0].reshape((N_STEPS, N_POINTS))
             y_pred = test[var][0]
-            idx = min(y_true.shape[0],y_pred.shape[0])
+            idx = min(y_true.shape[0], y_pred.shape[0])
             y_true = y_true[:idx]
             y_pred = y_pred[:idx]
             errors = (
