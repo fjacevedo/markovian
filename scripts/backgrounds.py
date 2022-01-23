@@ -38,7 +38,9 @@ for rg in REGRESSORS:
     else:
         var_models = dict({
             var: Markovian(
-                N_lat=N_LAT, N_lon=N_LON, regressor=ALL_REGRESSORS[rg]).fit(vals)
+                N_lat=N_LAT,
+                N_lon=N_LON,
+                regressor=ALL_REGRESSORS[rg]).fit(vals)
             for var, vals in VAR_DATA_TRAIN.items()
         })
     for var in VAR:
