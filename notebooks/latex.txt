@@ -1,0 +1,81 @@
+\begin{figure}[H]
+	\centering
+	\subfloat{\includegraphics[scale = 0.25]{Chapters/Imgs/hour_rmse/hour_3_5_air.png}} \hfill
+	\subfloat{\includegraphics[scale = 0.25]{Chapters/Imgs/hour_rmse/hour_3_5_rhum.png}} \hfill
+	\subfloat{\includegraphics[scale = 0.25]{Chapters/Imgs/hour_rmse/hour_3_5_uwnd.png}} \hfill
+	\subfloat{\includegraphics[scale = 0.25]{Chapters/Imgs/hour_rmse/hour_3_5_vwnd.png}} \hfill
+	\caption{Evolution per hour of $\log(RMSE)$  with $r=3$ and $p=5$.}
+	\label{fig:hour_rmse_3_5}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\subfloat{\includegraphics[scale = 0.25]{Chapters/Imgs/hour_rmse/hour_3_10_air.png}} \hfill
+	\subfloat{\includegraphics[scale = 0.25]{Chapters/Imgs/hour_rmse/hour_3_10_rhum.png}} \hfill
+	\subfloat{\includegraphics[scale = 0.25]{Chapters/Imgs/hour_rmse/hour_3_10_uwnd.png}} \hfill
+	\subfloat{\includegraphics[scale = 0.25]{Chapters/Imgs/hour_rmse/hour_3_10_vwnd.png}} \hfill
+	\caption{Evolution per hour of $\log(RMSE)$  with $r=3$ and $p=10$.}
+	\label{fig:hour_rmse_3_10}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\subfloat{\includegraphics[scale = 0.25]{Chapters/Imgs/hour_rmse/hour_3_15_air.png}} \hfill
+	\subfloat{\includegraphics[scale = 0.25]{Chapters/Imgs/hour_rmse/hour_3_15_rhum.png}} \hfill
+	\subfloat{\includegraphics[scale = 0.25]{Chapters/Imgs/hour_rmse/hour_3_15_uwnd.png}} \hfill
+	\subfloat{\includegraphics[scale = 0.25]{Chapters/Imgs/hour_rmse/hour_3_15_vwnd.png}} \hfill
+	\caption{Evolution per hour of $\log(RMSE)$  with $r=3$ and $p=15$.}
+	\label{fig:hour_rmse_3_15}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\subfloat{\includegraphics[scale = 0.25]{Chapters/Imgs/hour_rmse/hour_5_5_air.png}} \hfill
+	\subfloat{\includegraphics[scale = 0.25]{Chapters/Imgs/hour_rmse/hour_5_5_rhum.png}} \hfill
+	\subfloat{\includegraphics[scale = 0.25]{Chapters/Imgs/hour_rmse/hour_5_5_uwnd.png}} \hfill
+	\subfloat{\includegraphics[scale = 0.25]{Chapters/Imgs/hour_rmse/hour_5_5_vwnd.png}} \hfill
+	\caption{Evolution per hour of $\log(RMSE)$  with $r=5$ and $p=5$.}
+	\label{fig:hour_rmse_5_5}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\subfloat{\includegraphics[scale = 0.25]{Chapters/Imgs/hour_rmse/hour_5_10_air.png}} \hfill
+	\subfloat{\includegraphics[scale = 0.25]{Chapters/Imgs/hour_rmse/hour_5_10_rhum.png}} \hfill
+	\subfloat{\includegraphics[scale = 0.25]{Chapters/Imgs/hour_rmse/hour_5_10_uwnd.png}} \hfill
+	\subfloat{\includegraphics[scale = 0.25]{Chapters/Imgs/hour_rmse/hour_5_10_vwnd.png}} \hfill
+	\caption{Evolution per hour of $\log(RMSE)$  with $r=5$ and $p=10$.}
+	\label{fig:hour_rmse_5_10}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\subfloat{\includegraphics[scale = 0.25]{Chapters/Imgs/hour_rmse/hour_5_15_air.png}} \hfill
+	\subfloat{\includegraphics[scale = 0.25]{Chapters/Imgs/hour_rmse/hour_5_15_rhum.png}} \hfill
+	\subfloat{\includegraphics[scale = 0.25]{Chapters/Imgs/hour_rmse/hour_5_15_uwnd.png}} \hfill
+	\subfloat{\includegraphics[scale = 0.25]{Chapters/Imgs/hour_rmse/hour_5_15_vwnd.png}} \hfill
+	\caption{Evolution per hour of $\log(RMSE)$  with $r=5$ and $p=15$.}
+	\label{fig:hour_rmse_5_15}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\subfloat{\includegraphics[scale = 0.25]{Chapters/Imgs/hour_rmse/hour_7_5_air.png}} \hfill
+	\subfloat{\includegraphics[scale = 0.25]{Chapters/Imgs/hour_rmse/hour_7_5_rhum.png}} \hfill
+	\subfloat{\includegraphics[scale = 0.25]{Chapters/Imgs/hour_rmse/hour_7_5_uwnd.png}} \hfill
+	\subfloat{\includegraphics[scale = 0.25]{Chapters/Imgs/hour_rmse/hour_7_5_vwnd.png}} \hfill
+	\caption{Evolution per hour of $\log(RMSE)$  with $r=7$ and $p=5$.}
+	\label{fig:hour_rmse_7_5}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\subfloat{\includegraphics[scale = 0.25]{Chapters/Imgs/hour_rmse/hour_7_10_air.png}} \hfill
+	\subfloat{\includegraphics[scale = 0.25]{Chapters/Imgs/hour_rmse/hour_7_10_rhum.png}} \hfill
+	\subfloat{\includegraphics[scale = 0.25]{Chapters/Imgs/hour_rmse/hour_7_10_uwnd.png}} \hfill
+	\subfloat{\includegraphics[scale = 0.25]{Chapters/Imgs/hour_rmse/hour_7_10_vwnd.png}} \hfill
+	\caption{Evolution per hour of $\log(RMSE)$  with $r=7$ and $p=10$.}
+	\label{fig:hour_rmse_7_10}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\subfloat{\includegraphics[scale = 0.25]{Chapters/Imgs/hour_rmse/hour_7_15_air.png}} \hfill
+	\subfloat{\includegraphics[scale = 0.25]{Chapters/Imgs/hour_rmse/hour_7_15_rhum.png}} \hfill
+	\subfloat{\includegraphics[scale = 0.25]{Chapters/Imgs/hour_rmse/hour_7_15_uwnd.png}} \hfill
+	\subfloat{\includegraphics[scale = 0.25]{Chapters/Imgs/hour_rmse/hour_7_15_vwnd.png}} \hfill
+	\caption{Evolution per hour of $\log(RMSE)$  with $r=7$ and $p=15$.}
+	\label{fig:hour_rmse_7_15}
+\end{figure}
