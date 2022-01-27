@@ -26,7 +26,7 @@ class Markovian(base.BaseEstimator, base.RegressorMixin):
         self.N_LAT = N_lat
         self.N_LON = N_lon
         self.N_POINTS = N_lat*N_lon
-        self.L_GRID = [
+        self._L_GRID = [
             np.arange(self.N_POINTS).reshape(self.N_LAT, self.N_LON)]
         self.regressor = regressor(**kwargs)
         self.models = list([
@@ -93,15 +93,15 @@ class Markovian(base.BaseEstimator, base.RegressorMixin):
             ran_lon = np.arange(x-r, x+r+1) % self.N_LON
             ind_loc = np.array(
                 [[j, i] for j in ran_lat for i in ran_lon])
-            local_box = self.L_GRID[v][ind_loc[:, 0], ind_loc[:, 1]]
+            local_box = self._L_GRID[v][ind_loc[:, 0], ind_loc[:, 1]]
             local_box_add = np.array([
-                self.L_GRID[z][ind_loc[:, 0], ind_loc[:, 1]]
+                self._L_GRID[z][ind_loc[:, 0], ind_loc[:, 1]]
                 for z in range(0, v)])
             local_box_add = local_box_add.flatten()
             local_box = np.hstack(
                 (local_box, local_box_add)).astype('int32')
 
-            label_grid = self.L_GRID[v][y, x]
+            label_grid = self._L_GRID[v][y, x]
             local_pred = local_box[local_box < label_grid].astype('int32')
 
             P.append(local_pred)
