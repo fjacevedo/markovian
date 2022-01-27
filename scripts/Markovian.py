@@ -19,7 +19,7 @@ warnings.simplefilter('ignore')
 CWD = Path.cwd()
 
 
-class Markovian(base.BaseEstimator):
+class Markovian(base.BaseEstimator, base.RegressorMixin):
     def __init__(self, N_lat, N_lon, L=4, regressor=KNeighborsRegressor,
                  **kwargs):
         self.L = L
